@@ -27,6 +27,8 @@ Pop<-c(11:20)
 Ind<-c(1:80)
 Labels<-data.frame(sprintf("rc91@queensu.ca\nPOP-%02d-%03d",sort(rep(Pop,length(Ind))),c(1:80)))
 
+
+
 ## Error correction: allows for some damage to barcode without affecting ability to scan.
 #Level "L" - up to 7% damage -- ideal for very small labels (large pixels)
 #Level "M" - up to 15% damage
@@ -64,11 +66,11 @@ source("theme_empty.R")
 dmy<-data.frame(x=c(0,457),y=c(0,212))
 ### Page Setup
 pdf("LabelsOut.pdf",width=8.5,height=11,onefile=T,family="Courier") # Standard North American 8.5 x 11
- grid.newpage() # Open a new page on grid device 
- pushViewport(viewport(width=unit(8,"in"),height=unit(10,"in"),just=c("centre","centre"),layout = grid.layout(nrow=20, ncol=4))) # Margins: left/right:10mm x top/bottom:22mm
- row<-ERows
- col<-ECols+1
- for (i in 1:nrow(Labels)){
+grid.newpage() # Open a new page on grid device 
+pushViewport(viewport(width=unit(8,"in"),height=unit(10,"in"),just=c("centre","centre"),layout = grid.layout(nrow=20, ncol=4))) # Margins: left/right:10mm x top/bottom:22mm
+row<-ERows
+col<-ECols+1
+for (i in 1:nrow(Labels)){
   # Create text label
   Xtxt<-paste(gsub("\\\\n","\\\n",Labels[i,]),collapse="")
   # Split label to count characters
@@ -113,23 +115,17 @@ pdf("LabelsOut.pdf",width=8.5,height=11,onefile=T,family="Courier") # Standard N
     print(Xplt, vp = viewport(layout.pos.row=col,layout.pos.col=row,x=unit(0,"mm"),y=unit(0,"mm"),clip=F))
     Xplt<-Xpng<-Xtxt<-Xsplt<-QRLink<-NA # Reset object to avoid mislabelling
   } else {if(row>20){
-            row<-1
-            col<-col+1
-            if(col>4){
-              col<-1
-              grid.newpage() # Open a new page on grid device 
-              pushViewport(viewport(width=unit(8,"in"),height=unit(10,"in"),just=c("centre","centre"),layout = grid.layout(nrow=20, ncol=4))) # Margins: left/right:10mm x top/bottom:22mm
-            }
-          }
-          print(Xplt, vp = viewport(layout.pos.row=row,layout.pos.col=col,x=unit(0,"mm"),y=unit(0,"mm"),clip=F))
-          Xplt<-Xpng<-Xtxt<-Xsplt<-QRLink<-NA # Reset object to avoid mislabelling
+    row<-1
+    col<-col+1
+    if(col>4){
+      col<-1
+      grid.newpage() # Open a new page on grid device 
+      pushViewport(viewport(width=unit(8,"in"),height=unit(10,"in"),just=c("centre","centre"),layout = grid.layout(nrow=20, ncol=4))) # Margins: left/right:10mm x top/bottom:22mm
+    }
   }
- }
+    print(Xplt, vp = viewport(layout.pos.row=row,layout.pos.col=col,x=unit(0,"mm"),y=unit(0,"mm"),clip=F))
+    Xplt<-Xpng<-Xtxt<-Xsplt<-QRLink<-NA # Reset object to avoid mislabelling
+  }
+}
 dev.off()
-            
-            
-
-
-
-
 
